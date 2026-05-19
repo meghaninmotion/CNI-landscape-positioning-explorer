@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNI — Positioning & Theme Alignment</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #eeece7;
+    --text: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --border: rgba(0,0,0,0.12);
+    --border-med: rgba(0,0,0,0.2);
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg-secondary: #252523;
+      --bg-tertiary: #2e2e2b;
+      --text: #f0efe9;
+      --text-secondary: #9e9d97;
+      --border: rgba(255,255,255,0.10);
+      --border-med: rgba(255,255,255,0.18);
+      --blue: #5ba3e0;
+      --blue-light: #0c2f52;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg-tertiary);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .header-badge {
+    background: var(--blue-light);
+    border-radius: var(--radius-lg);
+    padding: 10px 18px;
+    flex-shrink: 0;
+  }
+  .header-badge-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: .04em;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+  .header-badge-name {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--blue);
+    line-height: 1.2;
+  }
+  .header-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    padding-top: 4px;
+    max-width: 420px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 0.5px solid var(--border-med);
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all .15s;
+    font-family: inherit;
+  }
+  .tab:hover { border-color: var(--blue); color: var(--blue); }
+  .tab.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: transparent;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Radar */
+  .radar-wrap { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .radar-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .legend-swatch { width: 28px; height: 3px; border-radius: 2px; }
+
+  .callout {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: .875rem 1rem;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+  .callout strong { color: var(--text); }
+
+  /* Statement */
+  .statement {
+    border-left: 3px solid var(--blue);
+    padding: 12px 16px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.75;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: var(--bg-secondary);
+  }
+
+  /* Bar chart */
+  .bar-section { margin-top: 1.75rem; }
+  .bar-head {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: .75rem;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 7px;
+  }
+  .bar-name {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 210px;
+    text-align: right;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    background: var(--bg-secondary);
+    border-radius: 3px;
+    height: 18px;
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .bar-peer {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--blue);
+    opacity: 0.22;
+  }
+  .bar-cni {
+    position: absolute;
+    top: 4px; left: 0;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--blue);
+    opacity: 0.85;
+  }
+  .bar-val {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 34px;
+    flex-shrink: 0;
+  }
+  .bar-legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+  }
+  .bar-legend-item { display: flex; align-items: center; gap: 6px; }
+
+  /* Differentiators */
+  .diff-section {
+    margin-top: 2.25rem;
+    border-top: 0.5px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .diff-head {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    letter-spacing: .01em;
+  }
+  .diff-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2.5rem;
+  }
+  .diff-item {
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+    line-height: 1.55;
+    display: flex;
+    gap: 9px;
+  }
+  .diff-item:last-child { border-bottom: none; }
+  .diff-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .diff-text strong { color: var(--text); font-weight: 600; }
+
+  @media (max-width: 580px) {
+    .diff-cols { grid-template-columns: 1fr; }
+    .bar-name { min-width: 130px; }
+    .header-badge-name { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-badge">
+      <div class="header-badge-label">CNI — founded 1990</div>
+      <div class="header-badge-name">Coalition for Networked Information</div>
+    </div>
+    <div class="header-desc">Joint initiative of ARL and EDUCAUSE. Dedicated to the transformative promise of digital information technology for advancing scholarly communication and intellectual productivity. 200+ members across higher ed, publishing, IT, libraries, foundations, and government.</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('radar')">Theme alignment</button>
+    <button class="tab" onclick="showTab('position')">Strategic positioning</button>
+  </div>
+
+  <!-- TAB 1: RADAR -->
+  <div class="section active" id="tab-radar">
+    <p class="note">CNI's programmatic depth on each shared theme (based on mission language, topic volume, and historical programming) vs. how widely that theme is held across the 19 peer organizations.</p>
+    <div class="radar-wrap">
+      <svg id="radarSvg" viewBox="0 0 600 450" width="100%" style="max-width:600px;" role="img" aria-label="Radar chart comparing CNI programmatic depth to peer field breadth across 14 themes"></svg>
+      <div class="radar-legend">
+        <div class="legend-item">
+          <div style="width:28px;height:0;border-top:2px dashed var(--blue);opacity:0.5;"></div>
+          Peer field — orgs sharing theme (of 19)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:var(--blue);"></div>
+          CNI — programmatic depth (0–10)
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>How to read this.</strong> Both polygons are scaled to the same 0–10 range. The lighter dashed shape shows peer breadth (how many of 19 orgs share a theme, rescaled). The darker shape shows CNI's programmatic depth. Where CNI's polygon extends beyond peers, CNI goes deeper than the field average.
+    </div>
+  </div>
+
+  <!-- TAB 2: POSITIONING -->
+  <div class="section" id="tab-position">
+    <p class="note">CNI's strategic posture within the broader library and IT organization landscape.</p>
+
+    <div class="statement">
+      CNI is the field's premier intelligence and convening function at the intersection of library and IT leadership — not an advocacy body, not a service provider, not a standards maker, but the place where the sector's hardest questions about digital information technology and scholarship are first surfaced and cross-pollinated.
+    </div>
+
+    <div class="bar-section">
+      <div class="bar-head">Topic volume as proxy for programmatic weight — CNI's top clusters vs peer field</div>
+      <div id="barChart"></div>
+      <div class="bar-legend">
+        <div class="bar-legend-item">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--blue);opacity:0.22;"></span>
+          No. of peer orgs sharing theme (of 19, rescaled)
+        </div>
+        <div class="bar-legend-item">
+          <span style="display:inline-block;width:12px;height:7px;border-radius:2px;background:var(--blue);opacity:0.85;"></span>
+          CNI topic item volume (raw count shown)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIFFERENTIATORS — always visible -->
+  <div class="diff-section">
+    <div class="diff-head">CNI differentiators — what sets it apart from all 19 peer organizations</div>
+    <div class="diff-cols">
+      <div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Only library-IT joint-venture coalition.</strong> Co-sponsored by ARL and EDUCAUSE, CNI is the sole org in this set whose founding purpose is to bridge library and IT communities as structural peers.</div></div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Cross-sector membership.</strong> 200+ members span higher ed, publishing, IT vendors, government agencies, foundations, and museums — the most sectorally diverse coalition here, and the only one where publishers and libraries are co-members.</div></div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Catalyst, not implementer.</strong> CNI explicitly frames itself as advancing, exploring, and convening — not operating services, publishing journals, or credentialing. Nearly all peers have direct member-service functions; CNI does not.</div></div>
+      </div>
+      <div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Semi-annual closed membership meetings.</strong> High-trust, project-briefing forums — not public conferences. This model for sharing emerging work-in-progress is rare; only CSG uses something comparable, and at far smaller scale.</div></div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Privacy, identity management &amp; cybersecurity footprint.</strong> Substantive topic clusters (privacy: 94, identity: 70) that few library-side orgs address. Only EDUCAUSE and Jisc have comparable depth here.</div></div>
+        <div class="diff-item"><div class="diff-dot"></div><div class="diff-text"><strong>Longest-running library-IT intelligence function.</strong> Founded 1990, CNI has the longest unbroken record tracking the networked information–research library intersection. Its 35-year program plan archive is a primary source for the field's intellectual history.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function showTab(id) {
+  const ids = ['radar', 'position'];
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ids[i] === id));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+/* ── RADAR ── */
+(function () {
+  const themes = [
+    { label: ['Research &', 'scholarship'],                   peer: 15, cni: 10 },
+    { label: ['Collaboration &', 'community'],                peer: 16, cni: 9  },
+    { label: ['Digital', 'transformation'],                   peer: 9,  cni: 10 },
+    { label: ['Digital preservation', '& stewardship'],       peer: 6,  cni: 10 },
+    { label: ['Teaching', '& learning'],                      peer: 5,  cni: 8  },
+    { label: ['Scholarly', 'publishing'],                     peer: 4,  cni: 9  },
+    { label: ['Shared infrastructure', '& interoperability'], peer: 6,  cni: 9  },
+    { label: ['Data &', 'research computing'],                peer: 5,  cni: 9  },
+    { label: ['Open access', '& open knowledge'],             peer: 8,  cni: 5  },
+    { label: ['Policy', 'advocacy'],                          peer: 6,  cni: 4  },
+    { label: ['Equity &', 'public good'],                     peer: 7,  cni: 5  },
+    { label: ['Global /', 'international'],                   peer: 6,  cni: 5  },
+    { label: ['Leadership &', 'prof. dev.'],                  peer: 6,  cni: 3  },
+    { label: ['Sustainability of', 'knowledge'],              peer: 5,  cni: 6  },
+  ];
+
+  const N = themes.length, cx = 300, cy = 225, R = 158;
+  const svg = document.getElementById('radarSvg');
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const ringColor = dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)';
+  const textColor = dark ? '#9e9d97' : '#5f5e5a';
+  const blue      = dark ? '#5ba3e0' : '#185FA5';
+
+  const angle = i => -Math.PI / 2 + (2 * Math.PI / N) * i;
+  const pt    = (r, i) => {
+    const a = angle(i);
+    return [cx + (r / 10) * R * Math.cos(a), cy + (r / 10) * R * Math.sin(a)];
+  };
+
+  let h = '';
+
+  [2, 4, 6, 8, 10].forEach(r => {
+    const pts = themes.map((_, i) => pt(r, i).join(',')).join(' ');
+    h += `<polygon points="${pts}" fill="none" stroke="${ringColor}" stroke-width="0.5"/>`;
+  });
+
+  themes.forEach((_, i) => {
+    const [x, y] = pt(10, i);
+    h += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${ringColor}" stroke-width="0.5"/>`;
+  });
+
+  const peerPts = themes.map((t, i) => pt(t.peer, i).join(',')).join(' ');
+  h += `<polygon points="${peerPts}" fill="${blue}" fill-opacity="0.10" stroke="${blue}" stroke-width="1.5" stroke-opacity="0.40" stroke-dasharray="4 3"/>`;
+
+  const cniPts = themes.map((t, i) => pt(t.cni, i).join(',')).join(' ');
+  h += `<polygon points="${cniPts}" fill="${blue}" fill-opacity="0.22" stroke="${blue}" stroke-width="2"/>`;
+
+  themes.forEach((t, i) => {
+    const [x, y] = pt(13.4, i);
+    const anchor = x < cx - 8 ? 'end' : x > cx + 8 ? 'start' : 'middle';
+    const lines  = t.label;
+    const baseY  = y + (y < cy - 5 ? -10 : y > cy + 5 ? 10 : 0);
+    h += `<text font-size="9.5" fill="${textColor}" text-anchor="${anchor}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">`;
+    lines.forEach((l, li) => {
+      h += `<tspan x="${x}" y="${baseY + (li - (lines.length - 1) / 2) * 13}">${l}</tspan>`;
+    });
+    h += `</text>`;
+  });
+
+  svg.innerHTML = h;
+})();
+
+/* ── BAR CHART ── */
+(function () {
+  const items = [
+    { name: 'Scholarly communication',        peer: 15, cni: 415 },
+    { name: 'Digital preservation',           peer: 6,  cni: 336 },
+    { name: 'Repositories',                   peer: 4,  cni: 347 },
+    { name: 'Information access & retrieval', peer: 15, cni: 477 },
+    { name: 'Teaching & learning',            peer: 5,  cni: 291 },
+    { name: 'Research data management',       peer: 5,  cni: 256 },
+    { name: 'Economic models / publishing',   peer: 4,  cni: 274 },
+    { name: 'Digital humanities',             peer: 0,  cni: 220 },
+    { name: 'Emerging technologies / AI',     peer: 3,  cni: 242 },
+    { name: 'Cyberinfrastructure',            peer: 6,  cni: 201 },
+    { name: 'Open access / equity',           peer: 8,  cni: 138 },
+    { name: 'Policy advocacy',               peer: 6,  cni: 99  },
+  ];
+  const maxCNI = 477, maxPeer = 19;
+  const wrap = document.getElementById('barChart');
+  wrap.innerHTML = items.map(d => {
+    const peerW = Math.round(d.peer / maxPeer * 100);
+    const cniW  = Math.round(d.cni  / maxCNI  * 100);
+    return `<div class="bar-row">
+      <div class="bar-name">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-peer" style="width:${peerW}%;"></div>
+        <div class="bar-cni"  style="width:${cniW}%;"></div>
+      </div>
+      <div class="bar-val">${d.cni}</div>
+    </div>`;
+  }).join('');
+})();
+</script>
+</body>
+</html>
